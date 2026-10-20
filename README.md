@@ -80,7 +80,7 @@ npm run typecheck    # Verifica tipos TypeScript
 
 ---
 
-## 📝 Paso 3: Crear un `LICENSE` (MIT)
+
 
 ```bash
 cat << 'EOF' > LICENSE
