@@ -1,0 +1,75 @@
+version: "1"
+
+services:
+  # Frontend (Static Site - Siempre Gratis)
+  - type: web
+    name: qa-3d-frontend
+    env: static
+    buildCommand: npm install && npm run build --workspace=@qa-3d/frontend
+    staticPublishPath: ./apps/frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_DATA_SERVICE_URL
+        sync: false # Se llena con la URL pública del Data Service
+      - key: VITE_QA_SERVICE_URL
+        sync: false
+      - key: VITE_SCENE_SERVICE_URL
+        sync: false
+
+  # Data Service (Plan Free de Render)
+  - type: web
+    name: qa-3d-data-service
+    env: node
+    region: oregon
+    plan: free # <-- COSTO CERO
+    buildCommand: npm install && npm run build --workspace=@qa-3d/data-service
+    startCommand: npm run start --workspace=@qa-3d/data-service
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false # <-- Pega aquí la URL de Neon.tech
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3002
+
+  # QA Service (Plan Free de Render)
+  - type: web
+    name: qa-3d-qa-service
+    env: node
+    region: oregon
+    plan: free # <-- COSTO CERO
+    buildCommand: npm install && npm run build --workspace=@qa-3d/qa-service
+    startCommand: npm run start --workspace=@qa-3d/qa-service
+    healthCheckPath: /health
+    envVars:
+      - key: DATA_SERVICE_URL
+        sync: false # URL interna: http://qa-3d-data-service:3002
+      - key: REDIS_URL
+        sync: false # <-- Pega aquí la URL de Upstash
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+
+  # Scene Service (Plan Free de Render)
+  - type: web
+    name: qa-3d-scene-service
+    env: node
+    region: oregon
+    plan: free # <-- COSTO CERO
+    buildCommand: npm install && npm run build --workspace=@qa-3d/scene-service
+    startCommand: npm run start --workspace=@qa-3d/scene-service
+    healthCheckPath: /health
+    envVars:
+      - key: DATA_SERVICE_URL
+        sync: false # URL interna: http://qa-3d-data-service:3002
+      - key: REDIS_URL
+        sync: false # <-- Pega aquí la URL de Upstash
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3003
