@@ -1,0 +1,31 @@
+{
+  "name": "@qa-3d/config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./eslint/base": "./eslint/base.mjs",
+    "./eslint/node": "./eslint/node.mjs",
+    "./eslint/frontend": "./eslint/frontend.mjs",
+    "./eslint/package": "./eslint/package.mjs",
+    "./prettier": "./prettier.config.mjs"
+  },
+  "files": [
+    "eslint",
+    "prettier.config.mjs",
+    ".prettierignore",
+    "tsconfig.base.json",
+    "tsconfig.frontend.json",
+    "tsconfig.node.json",
+    "tsconfig.package.json"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-prettier": "^5.5.7",
+    "globals": "^15.15.0",
+    "prettier": "^3.9.10",
+    "typescript-eslint": "^8.72.0"
+  }
+}
