@@ -20,6 +20,7 @@
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
+    
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
