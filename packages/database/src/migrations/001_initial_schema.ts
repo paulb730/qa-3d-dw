@@ -96,7 +96,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('locator_value', 'text', (col) => col.notNull())
     .addColumn('element_name', 'varchar(255)', (col) => col.notNull())
     .addColumn('element_text', 'text')
-    .addColumn('stability_score', 'numeric(5,2)', (col) => col.notNull().defaultTo(0))
+    .addColumn('stability_score', sql`numeric(5,2)` , (col) => col.notNull().defaultTo(0))
     .addColumn('is_default_stable', 'boolean', (col) => col.notNull().defaultTo(false))
     .addColumn('position_x', 'numeric')
     .addColumn('position_y', 'numeric')

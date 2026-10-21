@@ -27,12 +27,13 @@ export class ValidationError extends AppError {
 
 export function errorHandler(
   error: FastifyError | Error,
-  request: FastifyRequest,
-  reply: FastifyReply
+  _request: FastifyRequest, // 👈 El segundo argumento SIEMPRE debe ser request
+  reply: FastifyReply     // 👈 El tercer argumento SIEMPRE debe ser reply
+  
 ): void {
   // Manejar errores de Zod
   if (error instanceof ZodError) {
-    const messages = error.errors.map((e) => `${e.path.join('.')}: ${e.message}`);
+    const messages = error.issues.map((e) => `${e.path.join('.')}: ${e.message}`);
     reply.status(400).send({
       error: 'Validation Error',
       message: 'Error de validación en los datos',

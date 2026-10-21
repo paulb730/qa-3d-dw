@@ -1,10 +1,10 @@
 ﻿import pg from 'pg';
-
-import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Kysely, PostgresDialect } from 'kysely';
 import type { Database } from '@qa-3d/database';
+import fs from 'fs';
+import dotenv from 'dotenv';
 
 
 
@@ -16,19 +16,28 @@ const __dirname = path.dirname(__filename);
 
 // Probar múltiples rutas posibles para mayor robustez
 const possiblePaths = [
-  path.resolve(__dirname, '../../../../../.env'),  // 5 niveles (desde connection.ts)
-  path.resolve(__dirname, '../../../../.env'),      // 4 niveles (por si acaso)
-  path.resolve(process.cwd(), '../../.env'),        // Relativo al CWD
+  path.resolve(process.cwd(), '.env'),             // .env en la raíz de donde se ejecuta el comando
+  path.resolve(process.cwd(), '../../.env'),       // .env subiendo desde apps/data-service/
+  path.resolve(__dirname, '../../../../../.env'),  // Estructura profunda desde build/
+  path.resolve(__dirname, '../../../../.env'),      
 ];
 
 let envLoaded = false;
 for (const envPath of possiblePaths) {
   console.log(`🔍 Probando ruta: ${envPath}`);
-  const result = dotenv.config({ path: envPath });
-  if (process.env.DATABASE_URL) {
-    console.log(`✅ .env cargado desde: ${envPath}`);
-    envLoaded = true;
-    break;
+  
+  if (fs.existsSync(envPath)) {
+    
+    dotenv.config({ path: envPath });
+
+    if(process.env.DATABASE_URL){
+      envLoaded = true;
+      console.log(`✅ .env cargado con éxito desde: ${envPath}`);
+      envLoaded = true;
+      break;
+    }
+    
+   
   }
 }
 

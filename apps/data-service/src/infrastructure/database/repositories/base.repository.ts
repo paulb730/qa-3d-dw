@@ -1,7 +1,15 @@
-import type { Kysely } from 'kysely';
+import type { Kysely  } from 'kysely';
 import type { Database } from '@qa-3d/database';
 
-export abstract class BaseRepository<T extends string> {
+export interface IdentifiableTable {
+  id: any;
+}
+
+type TablesWithId<DB> = {
+  [K in keyof DB]: DB[K] extends IdentifiableTable ? K : never;
+}[keyof DB];
+
+export abstract class BaseRepository<T extends TablesWithId<Database>> {
   protected readonly db: Kysely<Database>;
   protected readonly tableName: T;
 
@@ -11,28 +19,32 @@ export abstract class BaseRepository<T extends string> {
   }
 
   async findById(id: string) {
-    return this.db
-      .selectFrom(this.tableName)
+    type IdType = Database[T] extends { id: infer I } ? I : never;
+    const query = this.db.selectFrom(this.tableName) as any;
+    return query
       .selectAll()
-      .where('id', '=', id)
+      .where('id' as any, '=', id as unknown as IdType)
       .executeTakeFirst();
   }
 
   async findAll(limit = 100, offset = 0) {
-    return this.db
-      .selectFrom(this.tableName)
+    const query = this.db.selectFrom(this.tableName) as any;
+    return query
       .selectAll()
       .limit(limit)
       .offset(offset)
-      .orderBy('created_at', 'desc')
+      .orderBy('created_at' as any, 'desc')
       .execute();
   }
 
   async delete(id: string): Promise<boolean> {
-    const result = await this.db
-      .deleteFrom(this.tableName)
-      .where('id', '=', id)
+    type IdType = Database[T] extends { id: infer I } ? I : never;
+    const query = this.db.deleteFrom(this.tableName) as any;
+
+    const result = query
+          .where('id', '=', id as unknown as IdType)
       .executeTakeFirst();
+      
     return Number(result.numDeletedRows) > 0;
   }
 }

@@ -54,14 +54,7 @@ const start = async () => {
   try {
     await app.listen({ port, host: '0.0.0.0' });
     console.log(`✅ Data Service en http://localhost:${port}`);
-    console.log('📋 Endpoints disponibles:');
-    console.log('   - GET    /health');
-    console.log('   - GET    /api/users');
-    console.log('   - POST   /api/users');
-    console.log('   - GET    /api/e2e-tests');
-    console.log('   - POST   /api/e2e-tests');
-    console.log('   - GET    /api/web-pages');
-    console.log('   - POST   /api/web-pages');
+
   } catch (err) {
     console.error('❌ Error al iniciar:', err);
     process.exit(1);

@@ -38,6 +38,7 @@ export async function userRoutes(app: FastifyInstance): Promise<void> {
       password_hash: passwordHash,
       name: body.name,
       role: body.role || 'qa_engineer',
+      avatar_url: '',
     });
     
     return reply.status(201).send({ data: user, message: 'Usuario creado exitosamente' });

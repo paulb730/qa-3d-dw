@@ -6,7 +6,7 @@
     "declaration": true,
     "paths": {
       "@/*": ["./src/*"],
-      "@qa-3d/shared": ["../../packages/shared/src/index.ts"]
+      
     }
   },
   "include": ["src/**/*"],

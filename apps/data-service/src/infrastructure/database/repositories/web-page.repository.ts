@@ -1,6 +1,6 @@
 import type { Kysely } from 'kysely';
 import { BaseRepository } from './base.repository.js';
-import type { Database, WebPagesTable } from '@qa-3d/database';
+
 
 type WebPageInsert = {
   user_id: string;
@@ -31,6 +31,7 @@ export class WebPageRepository extends BaseRepository<'web_pages'> {
         url: data.url,
         name: data.name,
         description: data.description || null,
+         processing_status: 'pending',
       })
       .returningAll()
       .executeTakeFirstOrThrow();

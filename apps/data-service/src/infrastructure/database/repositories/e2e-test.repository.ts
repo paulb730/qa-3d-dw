@@ -1,7 +1,7 @@
 import type { Kysely } from 'kysely';
 import { BaseRepository } from './base.repository.js';
 
-import type { Database, E2eTestsTable } from '@qa-3d/database';
+
 
 type E2eTestInsert = {
   user_id: string;
@@ -26,12 +26,15 @@ export class E2eTestRepository extends BaseRepository<'e2e_tests'> {
   }
 
   async create(data: E2eTestInsert) {
+
+    const insertData = {
+  ...data,
+  canvas_config_json: data.canvas_config_json || {},
+  status: data.status || 'draft', // ✨ Asegura que nunca sea undefined al insertar
+};
     return this.db
       .insertInto('e2e_tests')
-      .values({
-        ...data,
-        canvas_config_json: data.canvas_config_json || {},
-      })
+      .values(insertData)
       .returningAll()
       .executeTakeFirstOrThrow();
   }
@@ -39,10 +42,10 @@ export class E2eTestRepository extends BaseRepository<'e2e_tests'> {
   async update(id: string, data: Partial<E2eTestInsert>) {
 
     const updateData: Record<string, any> = { updated_at: new Date() };
-    if (data.name !== undefined) updateData.name = data.name;
-    if (data.description !== undefined) updateData.description = data.description;
-    if (data.status !== undefined) updateData.status = data.status;
-    if (data.canvas_config_json !== undefined) updateData.canvas_config_json = data.canvas_config_json as any;
+    if (data.name !== undefined) {updateData.name = data.name;}
+    if (data.description !== undefined) {updateData.description = data.description;}
+    if (data.status !== undefined) {updateData.status = data.status;}
+    if (data.canvas_config_json !== undefined) {updateData.canvas_config_json = data.canvas_config_json as any;}
     return this.db
       .updateTable('e2e_tests')
       .set(updateData)

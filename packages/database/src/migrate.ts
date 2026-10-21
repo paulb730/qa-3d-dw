@@ -72,13 +72,6 @@ async function getAppliedMigrations(): Promise<string[]> {
 }
 
 // ============================================
-// 7. Marcar migración como aplicada
-// ============================================
-async function markMigrationApplied(name: string): Promise<void> {
-  await pool.query('INSERT INTO _migrations (name) VALUES ($1)', [name]);
-}
-
-// ============================================
 // 8. Definición de migraciones (SQL directo)
 // ============================================
 interface MigrationDef {

@@ -1,6 +1,6 @@
 import type { Kysely } from 'kysely';
 import { BaseRepository } from './base.repository.js';
-import type { Databae, UsersTable } from '@qa-3d/database';
+import type { Database, UsersTable } from '@qa-3d/database';
 
 type UserInsert = Omit<UsersTable, 'id' | 'created_at' | 'updated_at' | 'is_active' | 'last_login_at'>;
 type UserUpdate = Partial<Pick<UsersTable, 'name' | 'avatar_url' | 'role'>>;
